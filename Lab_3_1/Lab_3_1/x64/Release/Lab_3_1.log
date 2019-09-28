@@ -1,0 +1,6 @@
+﻿  main.cpp
+  class any is only available with C++17 or later.
+D:\Study\Lab_3_1\Lab_3_1\Lab_3_1\main.cpp(37,2): error C4235:  использовано нестандартное расширение: ключевое слово "__asm" данной архитектурой не поддерживается
+D:\Study\Lab_3_1\Lab_3_1\Lab_3_1\main.cpp(37,7): error C2065:  rdtsc: необъявленный идентификатор
+D:\Study\Lab_3_1\Lab_3_1\Lab_3_1\main.cpp(38,1): error C2143:  синтаксическая ошибка: отсутствие ";" перед "}"
+D:\Study\Lab_3_1\Lab_3_1\Lab_3_1\main.cpp(50,16): warning C4244:  аргумент: преобразование "unsigned __int64" в "unsigned int", возможна потеря данных

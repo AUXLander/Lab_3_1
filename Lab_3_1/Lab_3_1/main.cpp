@@ -1,91 +1,90 @@
 #include <iostream>
-#include <io.h>
+#include <random>
 #include <vector>
 #include <string>
-
-typedef long double ld;
+#include <locale>
 
 using namespace std;
 
-class Striker {
-	vector<ld> P;
-	size_t p;
-	bool done;
-
+struct step {
+private:
+	double p0;
+	double pn;
+	size_t count;
 public:
-	Striker() {
-		done = false;
-		r = done;
-		p = 0;
-	}
-	void start(ld start_p) {
-		P.push_back(start_p);
-	}
-	bool shot(ld rand_val) {
-		if (done) return true;
-
-		if (rand_val <= P[p]) {
-			done = true;
-			return true;
-		}
-		new_val();
-		return false;
-	}
-	ld new_val() {
-		p++;
-		ld t = ((ld)(p + 1)) * P[p - 1];
-		t = t > 1 ? 1 : t;
-		P.push_back(t);
-		return t;
+	step(double _p) {
+		count = 1;
+		p0 = pn = _p;
 	}
 
+	double next() {
+		count++;
+		pn = std::fmin(p0 * count, 1);
+		return pn;
+	}
 
-	bool& r = done;
+	double getP() { return pn; }
+	size_t getSteps() { return count; }
 };
 
 
-unsigned __int64 GetCycleCount(void)
-{
+unsigned __int64 getTick(void) {
 	_asm rdtsc
 }
 
 
 int main() {
-	const size_t N = 5639000;
-	
+	setlocale(LC_ALL, "Russian");
 
-	size_t C = 0;
+	size_t count = 0;
+	size_t globalcount = 0;
+	size_t N = 100000;
 
-	size_t C5 = 0;
-	for (size_t k = 0; k < N; k++) {
-		srand(GetCycleCount());
+	cout
+		<< "  ТерВер. Лабораторная работа." << endl << endl
+		<< "  Три стрелка последовательно производят выстрелы - каждый по своей приближающийся мишени до попадания в неё. Вероятность попадания i-го стрелка при k-ом выстреле есть p(i,k). Пусть:" << endl << endl
+		<< "  p(1,1) = .3; p(2,1) = .2; p(3,1) = .25;" << endl
+		<< "  p(i,k) = min{k * p(i, 1), 1} для k = 1, 2..." << endl << endl
+		<< "  Повторить эксперимент N раз в одних и тех же условиях и найти относительную частоту события:" << endl
+		<< "  A = {Всего тремя стрелками было произведено 5 выстрелов}" << endl
+		<< "  Найти вероятность события А теоретически." << endl << endl
+		<< "  Чтобы провети эксперимент, введите количество повторений N (max 100,000):" << endl << "  ";
+	cin 
+		>> N;
+	cout
+		<< endl;
 
-		Striker* L = new Striker[3];
-		L[0].start(0.3);
-		L[1].start(0.2);
-		L[2].start(0.25);
+	N = std::min(N, (size_t)100000);
 
-		C = 0;
+	std::mt19937 GRN;
+	std::uniform_real_distribution<> urd(0, 1);
 
-		while (!L[0].r || !L[1].r || !L[2].r) {
-			for (size_t i = 0; i < 3; i++) {
-				if (!L[i].r) {
-					L[i].shot((ld)(rand() % 10000) / 10000);
-					C++;
+	for (size_t i = 0; i < N; i++) {
+		GRN.seed(getTick());
+
+		vector<step> S = { {0.3}, {0.2}, {0.25} };
+
+		count = 0;
+
+		for (auto striker : S) {
+			while (true) {
+				double check = urd(GRN);
+				double pl = striker.getP();
+				if (check <= pl) {
+					count += striker.getSteps();
+					break;
 				}
+				striker.next();
 			}
 		}
 
-		//cout << C << endl;
-
-		if (C == 5) {
-			C5++;
-		}
-
-		delete[] L;
+		globalcount += (size_t)(count == 5);
 	}
-	ld v = (ld)C5 / (ld)N;
-	cout << to_string(v) << endl;
-		
+
+	cout
+		<< "  Кол-во благоприятных исходов:\t" << globalcount << endl
+		<< "  Кол-во повторений:\t\t" << N << endl
+		<< "  Частота:\t\t\t" << std::to_string((double)globalcount / (double)N) << endl;
+
 	return 0;
 }

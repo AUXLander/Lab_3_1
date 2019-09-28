@@ -1,7 +1,7 @@
 ﻿  main.cpp
-D:\Study\Lab_3_1\Lab_3_1\Lab_3_1\main.cpp(61,22): warning C4244:  аргумент: преобразование "unsigned __int64" в "unsigned int", возможна потеря данных
+D:\Study\Lab_3_1\Lab_3_1\Lab_3_1\main.cpp(63,19): warning C4244:  аргумент: преобразование "unsigned __int64" в "unsigned int", возможна потеря данных
   Создание кода
-  1 of 123 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
+  0 of 147 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
