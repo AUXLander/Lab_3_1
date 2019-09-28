@@ -68,9 +68,7 @@ int main() {
 
 		for (auto striker : S) {
 			while (true) {
-				double check = urd(GRN);
-				double pl = striker.getP();
-				if (check <= pl) {
+				if (urd(GRN) <= striker.getP()) {
 					count += striker.getSteps();
 					break;
 				}
